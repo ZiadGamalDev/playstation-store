@@ -49,12 +49,6 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('password/confirm', [PasswordController::class, 'confirm']);
     Route::post('password/update', [PasswordController::class, 'update']);
 
-    Route::get('countries', [CountryController::class, 'index']);
-    Route::get('countries/{country}', [CountryController::class, 'show']);
-    
-    Route::get('cards', [CardController::class, 'index']);
-    Route::get('cards/{card}', [CardController::class, 'show']);
-    
     Route::get('carts', [CartController::class, 'index']);
     Route::get('carts/{cart}', [CartController::class, 'show']);
 
@@ -85,6 +79,12 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('orders/{order}/checkout', [OrderController::class, 'checkout']);
     });
 });
+
+Route::get('countries', [CountryController::class, 'index']);
+Route::get('countries/{country}', [CountryController::class, 'show']);
+
+Route::get('cards', [CardController::class, 'index']);
+Route::get('cards/{card}', [CardController::class, 'show']);
 
 # Test
 Route::get('test', function () {
