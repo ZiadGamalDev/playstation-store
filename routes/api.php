@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetEmailController;
 use App\Http\Controllers\Auth\VerificationEmailController;
+use App\Http\Controllers\CardCodeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CountryController;
@@ -11,7 +12,12 @@ use App\Http\Controllers\CardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
+use App\Mail\Auth\VerificationEmail;
+use App\Mail\CardCodeEmail;
+use App\Models\User;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,7 +71,11 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::post('cards', [CardController::class, 'store']);
         Route::put('cards/{card}', [CardController::class, 'update']);
-        Route::delete('cards/{card}', [CardController::class, 'destroy']);   
+        Route::delete('cards/{card}', [CardController::class, 'destroy']);
+
+        Route::get('card-codes', [CardCodeController::class, 'index']);
+        Route::get('card-codes/{cardCode}', [CardCodeController::class, 'show']);
+        Route::post('card-codes', [CardCodeController::class, 'store']);
     });
 
     Route::group(['middleware' => ['auth.role:user']], function () {        
@@ -76,9 +86,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('orders', [OrderController::class, 'store']);
         Route::put('orders/{order}', [OrderController::class, 'update']);
         Route::delete('orders/{order}', [OrderController::class, 'destroy']);
-        Route::post('orders/{order}/checkout', [OrderController::class, 'checkout']);
+        
+        Route::get('payments/checkout/{order}', [PaymentController::class, 'checkout'])->middleware('verified');
     });
 });
+
+Route::get('payments/success/{order}', [PaymentController::class, 'success'])->name('payment.success');
+Route::get('payments/cancel', [PaymentController::class, 'cancel'])->name('payment.cancel');
 
 Route::get('countries', [CountryController::class, 'index']);
 Route::get('countries/{country}', [CountryController::class, 'show']);
@@ -89,4 +103,18 @@ Route::get('cards/{card}', [CardController::class, 'show']);
 # Test
 Route::get('test', function () {
     return response()->json(['message' => 'test']);
+});
+
+Route::get('test/email/{email}', function ($email) {
+    Mail::raw('This is a test email from Laravel using Hostinger SMTP.', function ($message) use ($email) {
+        $message->to($email)->subject('Test Email');
+    });
+
+    return 'Email sent successfully!';
+});
+
+Route::get('test/card-code', function () {
+    $user = User::where('email', 'zyadgamal450@gmail.com')->first();
+    $cardCode = Str::random(20);
+    Mail::to($user->email)->send(new CardCodeEmail($user->name, $cardCode));
 });

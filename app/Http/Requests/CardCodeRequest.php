@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class OrderRequest extends FormRequest
+class CardCodeRequest extends FormRequest
 {
     public function authorize(): bool
     {
@@ -13,11 +13,8 @@ class OrderRequest extends FormRequest
 
     public function rules(): array
     {
-        $mandatory = $this->method() == 'POST' ? 'required' : 'sometimes';
-
         return [
-            'cart_ids' => "$mandatory|array",
-            'cart_ids.*' => 'exists:carts,id',
+            'code' => 'required|string|min:3|max:255|unique:card_codes',
         ];
     }
 }

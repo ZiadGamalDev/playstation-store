@@ -55,7 +55,6 @@
     <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td align="center">
-                <img src="hospital_logo.png" alt="Hospital Logo" style="max-width: 150px; margin-bottom: 20px;">
                 <h2>{{ config('app.name') }}</h2>
             </td>
         </tr>
@@ -63,7 +62,7 @@
             <td>
                 <p>Dear {{ $name }},</p>
                 <p>Your OTP for verification is: <strong>{{ $otp }}</strong></p>
-                <p>Please use this OTP to reset your password.</p>
+                <p>Please use this OTP to verify your email address.</p>
             </td>
         </tr>
         <tr>

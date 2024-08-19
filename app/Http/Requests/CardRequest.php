@@ -13,14 +13,15 @@ class CardRequest extends FormRequest
 
     public function rules(): array
     {
+        $mandatory = $this->method() == 'POST' ? 'required' : 'sometimes';
+
         return [
-            'title' => 'required|string|max:255',
+            'title' => "$mandatory|string|max:255",
             'description' => 'nullable|string|max:1000',
-            'image' => 'required|image|max:2048|mimes:png,jpg,jpeg',
-            'price' => 'required|numeric',
-            'discount' => 'nullable|numeric',
-            'quantity' => 'nullable|integer',
-            'country_id' => 'required|exists:countries,id',
+            'image' => "$mandatory|image|max:2048|mimes:png,jpg,jpeg",
+            'price' => "$mandatory|numeric",
+            'discount' => 'nullable|numeric|gt:0',
+            'country_id' => "$mandatory|exists:countries,id",
         ];
     }
 }

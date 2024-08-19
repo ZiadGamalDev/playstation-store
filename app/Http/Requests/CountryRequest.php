@@ -13,16 +13,11 @@ class CountryRequest extends FormRequest
 
     public function rules(): array
     {
-        if ($this->method() == 'POST') {
-            return [
-                'name' => 'required|string|max:255|unique:countries',
-                'flag' => 'required|image|max:2048|mimes:png,jpg,jpeg',
-            ];
-        }
+        $mandatory = $this->method() == 'POST' ? 'required' : 'sometimes';
 
         return [
-            'name' => 'required|string|max:255',
-            'flag' => 'required|image|max:2048|mimes:png,jpg,jpeg',
+            'name' => "$mandatory|string|max:255" . ($this->method() == 'POST' ? '|unique:countries' : ''),
+            'flag' => "$mandatory|image|max:2048|mimes:png,jpg,jpeg",
         ];
     }
 }

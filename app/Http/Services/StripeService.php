@@ -46,4 +46,40 @@ class StripeService
             throw new \Exception('Failed to create Stripe charge: ' . $e->getMessage());
         }
     }
+
+    public function createCheckoutSession($amount, $currency, $orderId)
+    {
+        try {
+            $session = $this->stripe->checkout->sessions->create([
+                'payment_method_types' => ['card'],
+                'line_items' => [[
+                    'price_data' => [
+                        'currency' => $currency,
+                        'product_data' => [
+                            'name' => 'Order #' . $orderId,
+                        ],
+                        'unit_amount' => $amount,
+                    ],
+                    'quantity' => 1,
+                ]],
+                'mode' => 'payment',
+                'success_url' => route('payment.success', ['order' => $orderId]) . '?session_id={CHECKOUT_SESSION_ID}',
+                'cancel_url' => route('payment.cancel'),
+            ]);
+
+            return $session;
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to create Stripe Checkout session: ' . $e->getMessage());
+        }
+    }
+
+    public function retrieveCheckoutSession($sessionId)
+    {
+        try {
+            return $this->stripe->checkout->sessions->retrieve($sessionId);
+        } catch (\Exception $e) {
+            throw new \Exception('Failed to retrieve Stripe Checkout session: ' . $e->getMessage());
+        }
+    }
+
 }

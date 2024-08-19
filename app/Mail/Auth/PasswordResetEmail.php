@@ -20,14 +20,14 @@ class PasswordResetEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Password Reset Email',
+            subject: 'Password Reset',
         );
     }
 
     public function content(): Content
     {
         return new Content(
-            view: 'auth.password-reset-email',
+            view: 'emails.auth.password-reset',
         );
     }
 

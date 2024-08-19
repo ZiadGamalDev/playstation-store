@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{{ config('app.name') }} - OTP Email</title>
+    <title>{{ config('app.name') }} - Card Code</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -55,15 +55,33 @@
     <table role="presentation" width="100%" border="0" cellspacing="0" cellpadding="0">
         <tr>
             <td align="center">
-                <img src="hospital_logo.png" alt="Hospital Logo" style="max-width: 150px; margin-bottom: 20px;">
                 <h2>{{ config('app.name') }}</h2>
             </td>
         </tr>
         <tr>
             <td>
-                <p>Dear {{ $name }},</p>
-                <p>Your OTP for verification is: <strong>{{ $otp }}</strong></p>
-                <p>Please use this OTP to verify your email address.</p>
+                <p>Dear {{ $order->user->name }},</p>
+                <h1>Order #{{ $order->id }}</h1>
+                <p>Thank you for your purchase! Here are your order details:</p>
+                <table width="100%" border="1" cellspacing="0" cellpadding="10">
+                    <thead>
+                        <tr>
+                            <th>Card</th>
+                            <th>Code</th>
+                            <th>Price</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($order->items as $item)
+                            <tr>
+                                <td>{{ $item->card->title }}</td>
+                                <td><strong>{{ $item->code }}</strong></td>
+                                <td>${{ $item->price }}</td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <p>Thank you for shopping with us!</p>
             </td>
         </tr>
         <tr>

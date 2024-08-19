@@ -3,24 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderRequest;
-use App\Http\Requests\StripeRequest;
-use App\Http\Services\StripeService;
 use App\Models\Order;
 use App\Http\Traits\ApiResponseTrait;
-use App\Models\Card;
 use App\Models\Cart;
 use App\Models\OrderItem;
-use App\Models\Payment;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
     use ApiResponseTrait;
-
-    public function __construct(protected StripeService $stripeService)
-    {
-    }
 
     public function index()
     {
@@ -39,29 +30,36 @@ class OrderController extends Controller
 
         DB::beginTransaction();
         try {
-            $order = Order::create([
-                'user_id' => auth()->id(),
-            ]);
-            $total = 0;
+            // Initialize a new order
+            $order = Order::create(['user_id' => auth()->id()]);
+            $order->total = 0;
+
             foreach ($data['cart_ids'] as $cart_id) {
-                $cart = Cart::with('card')->find($cart_id);
-                $cardPrice = ($cart->card->discount ?? $cart->card->price) * $cart->card->quantity;
-                $total += $cardPrice * $cart->quantity;
+                // Find the cart and associated card
+                $cart = Cart::with('card')->findOrFail($cart_id);
+                $card = $cart->card;
+                $cardPrice = $card->discount ?? $card->price;
+
+                // Calculate the total price
+                $order->total += $cardPrice * $cart->quantity;
+
+                // Create order items
                 OrderItem::create([
                     'order_id' => $order->id,
-                    'card_id' => $cart->card->id,
+                    'card_id' => $card->id,
+                    'cart_id' => $cart->id,
                     'quantity' => $cart->quantity,
                     'price' => $cardPrice,
                 ]);
-                $cart->delete();
             }
 
-            $order->update(['total' => $total]);
+            // Save the order with the total amount
+            $order->save();
 
             DB::commit();
         } catch (\Exception $e) {
             DB::rollback();
-            return $this->errorResponse('Order creation failed', 500);
+            return $this->errorResponse('Order creation failed: ' . $e->getMessage(), 500);
         }
 
         return $this->respondWithData('Order created successfully', $order, 201);
@@ -92,37 +90,5 @@ class OrderController extends Controller
         $order->delete();
 
         return $this->successResponse('Order deleted successfully', 200);
-    }
-
-    public function checkout(StripeRequest $request, Order $order)
-    {
-        $data = $request->validated();
-
-        if ($order->paid) {
-            return $this->errorResponse('Payment already done', 409);
-        }
-
-        try {
-            $token = $this->stripeService->createToken($data);
-
-            $amount = $order->total * 100;
-
-            $charge = $this->stripeService->createCharge($amount, 'egp', $token);
-
-            $order->update(['status' => true]);
-
-            Payment::create([
-                'amount' => $order->total,
-                'method' => 'stripe',
-                'status' => $charge->status,
-                'session_id' => $charge->id,
-                'user_id' => $order->user_id,
-                'order_id' => $order->id
-            ]);
-
-            return $this->successResponse('Payment successful');
-        } catch (\Exception $e) {
-            return $this->errorResponse($e->getMessage());
-        }
     }
 }

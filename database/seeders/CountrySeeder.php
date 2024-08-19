@@ -13,6 +13,18 @@ class CountrySeeder extends Seeder
     {
         $countries = [
             [
+                'name' => 'USA',
+                'flag' => 'images/countries/usa.jpg',
+            ],
+            [
+                'name' => 'UAE',
+                'flag' => 'images/countries/uae.jpg',
+            ],
+            [
+                'name' => 'UK',
+                'flag' => 'images/countries/uk.jpg',
+            ],
+            [
                 'name' => 'Lebanon',
                 'flag' => 'images/countries/lebanon.jpg',
             ],
@@ -28,20 +40,14 @@ class CountrySeeder extends Seeder
                 'name' => 'KSA',
                 'flag' => 'images/countries/ksa.jpg',
             ],
-            [
-                'name' => 'UAE',
-                'flag' => 'images/countries/uae.jpg',
-            ],
-            [
-                'name' => 'USA',
-                'flag' => 'images/countries/usa.jpg',
-            ],
         ];
 
         foreach($countries as $country) {
-            $image = file_get_contents(database_path('seeders/' . $country['flag']));
-            Storage::disk('public')->put($country['flag'], $image);
-
+            $path = database_path('seeders/' . $country['flag']);
+            if (file_exists($path)) {
+                Storage::disk('public')->put($country['flag'], file_get_contents($path));
+            }
+            
             Country::create($country);
         }
     }

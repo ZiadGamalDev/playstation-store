@@ -13,9 +13,11 @@ class CartRequest extends FormRequest
 
     public function rules(): array
     {
+        $mandatory = $this->method() == 'POST' ? 'required' : 'sometimes';
+
         return [
             'quantity' => 'nullable|integer|min:1',
-            'card_id' => 'required|exists:cards,id',
+            'card_id' => "$mandatory|exists:cards,id",
         ];
     }
 }

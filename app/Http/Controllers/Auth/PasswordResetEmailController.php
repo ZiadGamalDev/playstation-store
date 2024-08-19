@@ -32,9 +32,9 @@ class PasswordResetEmailController extends Controller
         $user = User::where('email', $request->email)->first();
 
         if ($user->otp != $request->otp) {
-            $this->errorResponse('Invalid OTP code', 422);
+            return $this->errorResponse('Invalid OTP code', 422);
         } elseif ($user->otp_sent_at->addMinutes(10)->isPast()) {
-            $this->errorResponse('OTP code expired', 422);
+            return $this->errorResponse('OTP code expired', 422);
         }
 
         $user->otp = null;
