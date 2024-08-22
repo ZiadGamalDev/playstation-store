@@ -102,7 +102,7 @@ Route::get('cards/{card}', [CardController::class, 'show']);
 
 # Test
 Route::get('test', function () {
-    return response()->json(['message' => 'test']);
+    return response()->json(['message' => 'testing...']);
 });
 
 Route::get('test/email/{email}', function ($email) {
