@@ -84,8 +84,6 @@ Route::group(['middleware' => ['auth']], function () {
         Route::delete('carts/{cart}', [CartController::class, 'destroy']);
 
         Route::post('orders', [OrderController::class, 'store']);
-        Route::put('orders/{order}', [OrderController::class, 'update']);
-        Route::delete('orders/{order}', [OrderController::class, 'destroy']);
         
         Route::get('payments/checkout/{order}', [PaymentController::class, 'checkout'])->middleware('verified');
     });
@@ -111,10 +109,4 @@ Route::get('test/email/{email}', function ($email) {
     });
 
     return 'Email sent successfully!';
-});
-
-Route::get('test/card-code', function () {
-    $user = User::where('email', 'zyadgamal450@gmail.com')->first();
-    $cardCode = Str::random(20);
-    Mail::to($user->email)->send(new CardCodeEmail($user->name, $cardCode));
 });

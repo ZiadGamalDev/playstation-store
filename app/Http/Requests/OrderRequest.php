@@ -13,10 +13,8 @@ class OrderRequest extends FormRequest
 
     public function rules(): array
     {
-        $mandatory = $this->method() == 'POST' ? 'required' : 'sometimes';
-
         return [
-            'cart_ids' => "$mandatory|array",
+            'cart_ids' => 'required|array',
             'cart_ids.*' => 'exists:carts,id',
         ];
     }

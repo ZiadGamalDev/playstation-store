@@ -32,4 +32,9 @@ class Order extends Model
     {
         return $this->hasMany(CardCode::class);
     }
+
+    public function carts()
+    {
+        return $this->hasManyThrough(Cart::class, OrderItem::class, 'order_id', 'id', 'id', 'cart_id');
+    }
 }

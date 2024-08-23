@@ -9,6 +9,10 @@ class CardCode extends Model
 {
     use HasFactory;
 
+    public $timestamps = false;
+    public $incrementing = false;
+    protected $primaryKey = 'code';
+    protected $keyType = 'string';
     protected $fillable = [
         'code', 'card_id',  'order_id', 'order_item_id', 'used_at'
     ];
