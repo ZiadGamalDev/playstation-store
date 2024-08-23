@@ -31,7 +31,7 @@ class AuthController extends Controller
         $data = $request->validated();
 
         if (!$token = auth()->attempt($data)) {
-            return $this->errorResponse('Unauthorized', 401);
+            return $this->errorResponse('Email or password is incorrect', 401);
         }
 
         return $this->respondWithToken('Login successfully', auth()->user(), $token);

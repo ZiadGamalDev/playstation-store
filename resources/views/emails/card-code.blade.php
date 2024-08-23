@@ -48,6 +48,20 @@
             font-size: 12px;
             color: #777;
         }
+
+        .order-item-table {
+            margin-bottom: 30px;
+        }
+
+        .order-item-table th,
+        .order-item-table td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        .order-item-table th {
+            background-color: #f8f9fa;
+        }
     </style>
 </head>
 
@@ -62,25 +76,24 @@
             <td>
                 <p>Dear {{ $order->user->name }},</p>
                 <h1>Order #{{ $order->id }}</h1>
-                <p>Thank you for your purchase! Here are your order details:</p>
-                <table width="100%" border="1" cellspacing="0" cellpadding="10">
-                    <thead>
-                        <tr>
-                            <th>Card</th>
-                            <th>Code</th>
-                            <th>Price</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($order->items as $item)
+                <p>Thank you for your purchase! Here are your card codes:</p>
+                @foreach ($order->items as $item)
+                    <h2>{{ $item->card->title }} (Quantity: {{ $item->quantity }})</h2>
+                    <table class="order-item-table" width="100%" border="1" cellspacing="0" cellpadding="10">
+                        <thead>
                             <tr>
-                                <td>{{ $item->card->title }}</td>
-                                <td><strong>{{ $item->code }}</strong></td>
-                                <td>${{ $item->price }}</td>
+                                <th>Codes</th>
                             </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            @foreach ($item->cardCodes as $code)
+                                <tr>
+                                    <td><strong>{{ $code->code }}</strong></td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endforeach
                 <p>Thank you for shopping with us!</p>
             </td>
         </tr>

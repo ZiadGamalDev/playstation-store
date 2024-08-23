@@ -16,7 +16,7 @@ class CardCodeEmail extends Mailable
 
     public function __construct(public Order $order)
     {
-        $order->load('items.card', 'user');
+        $order->load('items.card', 'items.cardCodes', 'user');
     }
 
     public function envelope(): Envelope

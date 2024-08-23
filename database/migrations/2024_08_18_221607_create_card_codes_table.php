@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('card_codes', function (Blueprint $table) {
             $table->id();
             $table->string('code')->unique();
+            $table->foreignId('card_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('order_id')->nullable()->constrained()->onDelete('cascade');
+            $table->foreignId('order_item_id')->nullable()->constrained()->onDelete('cascade');
             $table->timestamp('used_at')->nullable();
             $table->timestamps();
         });

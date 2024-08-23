@@ -83,7 +83,7 @@ class PaymentController extends Controller
     {
         if ($order->paid) {
             return $this->errorResponse('Payment already done', 409);
-        } elseif (CardCode::whereNull('used_at')->count() < $order->items->count()) {
+        } elseif (CardCode::whereNull('used_at')->count() < $order->items->sum('quantity')) {
             return $this->errorResponse('Not enough card codes available', 409);
         }
 
@@ -101,24 +101,15 @@ class PaymentController extends Controller
 
     public function success(Request $request, Order $order)
     {
-        if ($order->paid) {
-            return view('payments.error', ['message' => 'Payment already processed']);
-        }
-
-        $sessionId = $request->query('session_id');
-
         DB::beginTransaction();
-
         try {
+            $sessionId = $request->query('session_id');
             $session = $this->stripeService->retrieveCheckoutSession($sessionId);
-
             if (!$session || $session->payment_status !== 'paid') {
                 throw new \Exception('Invalid or incomplete payment session');
             }
 
-            // Mark order as paid and create a payment record
             $order->update(['paid' => true]);
-
             Payment::create([
                 'amount' => $order->total,
                 'method' => 'stripe',
@@ -128,19 +119,22 @@ class PaymentController extends Controller
                 'order_id' => $order->id,
             ]);
 
-            // Assign card codes and clean up cart items
             foreach ($order->items as $item) {
-                $cardCode = CardCode::whereNull('used_at')->firstOrFail();
-                $cardCode->update(['used_at' => now()]);
-                $item->update(['code' => $cardCode->code]);
+                $cardCodes = CardCode::whereNull('used_at')->limit($item->quantity)->get();
+                foreach ($cardCodes as $cardCode) {
+                    $cardCode->update([
+                        'card_id' => $item->card_id,
+                        'order_id' => $order->id,
+                        'order_item_id' => $item->id,
+                        'used_at' => now()
+                    ]);
+                }
                 $item->cart()->delete();
             }
 
-            // Send email with card codes
             Mail::to($order->user->email)->send(new CardCodeEmail($order));
 
             DB::commit();
-
             return view('payments.success', ['order' => $order]);
         } catch (\Exception $e) {
             DB::rollback();

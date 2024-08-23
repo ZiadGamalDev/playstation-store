@@ -19,6 +19,6 @@ class AuthRole
             return $next($request);
         }
 
-        return $this->errorResponse('Unauthorized', 401);
+        return $this->errorResponse('You are not authorized', 401);
     }
 }

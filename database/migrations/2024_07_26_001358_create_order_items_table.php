@@ -18,9 +18,7 @@ return new class extends Migration
             $table->foreignId('order_id')->constrained()->onDelete('cascade');
             $table->foreignId('card_id')->constrained()->onDelete('cascade');
             $table->foreignId('cart_id')->nullable()->constrained()->onDelete('set null');
-            $table->string('code')->nullable();
             $table->timestamps();
-            $table->foreign('code')->references('code')->on('card_codes')->onDelete('set null');
         });
     }
 
