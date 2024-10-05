@@ -12,9 +12,7 @@ use App\Http\Controllers\CardController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
-use App\Mail\Auth\VerificationEmail;
-use App\Mail\CardCodeEmail;
-use App\Models\User;
+use App\Http\Controllers\WhatsAppController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -110,3 +108,6 @@ Route::get('test/email/{email}', function ($email) {
 
     return 'Email sent successfully!';
 });
+
+Route::get('test/whatsapp', [WhatsAppController::class, 'sendMessage']);
+Route::get('test/whatsapp/curl', [WhatsAppController::class, 'sendMessageCurl']);
