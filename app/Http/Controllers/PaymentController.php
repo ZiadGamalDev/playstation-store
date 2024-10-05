@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\StripeService;
 use App\Models\Payment;
-use App\Http\Traits\ApiResponseTrait;
 use App\Mail\CardCodeEmail;
 use App\Models\CardCode;
 use App\Models\Order;
@@ -14,8 +13,6 @@ use Illuminate\Support\Facades\Mail;
 
 class PaymentController extends Controller
 {
-    use ApiResponseTrait;
-
     public function __construct(protected StripeService $stripeService) {}
 
 

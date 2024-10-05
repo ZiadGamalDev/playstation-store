@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\CardCodeRequest;
-use App\Http\Traits\ApiResponseTrait;
 use App\Models\CardCode;
 
 class CardCodeController extends Controller
 {
-    use ApiResponseTrait;
-
     public function index()
     {
         $cardCodes = CardCode::all();

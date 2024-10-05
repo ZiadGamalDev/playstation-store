@@ -4,13 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CartRequest;
 use App\Models\Cart;
-use App\Http\Traits\ApiResponseTrait;
-use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    use ApiResponseTrait;
-
     public function index()
     {
         if (auth()->user()->is_admin) {

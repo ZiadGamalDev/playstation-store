@@ -4,14 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CountryRequest;
 use App\Models\Country;
-use App\Http\Traits\ApiResponseTrait;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CountryController extends Controller
 {
-    use ApiResponseTrait;
-
     public function index()
     {
         $countries = Country::all();

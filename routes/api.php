@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CountryController;
 use App\Http\Controllers\CardController;
+use App\Http\Controllers\CardFavoriteController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\PaymentController;
@@ -84,6 +85,10 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('orders', [OrderController::class, 'store']);
         
         Route::get('payments/checkout/{order}', [PaymentController::class, 'checkout'])->middleware('verified');
+
+        Route::get('card-favorites', [CardFavoriteController::class, 'index']);
+        Route::post('card-favorites', [CardFavoriteController::class, 'store']);
+        Route::delete('card-favorites/{favorite}', [CardFavoriteController::class, 'destroy']);
     });
 });
 

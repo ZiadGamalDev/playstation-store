@@ -4,13 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CardRequest;
 use App\Models\Card;
-use App\Http\Traits\ApiResponseTrait;
 use Illuminate\Support\Facades\Storage;
 
 class CardController extends Controller
 {
-    use ApiResponseTrait;
-
     public function index()
     {
         $cards = Card::all();

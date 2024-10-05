@@ -4,15 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\OrderRequest;
 use App\Models\Order;
-use App\Http\Traits\ApiResponseTrait;
 use App\Models\Cart;
 use App\Models\OrderItem;
 use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-    use ApiResponseTrait;
-
     public function index()
     {
         if (auth()->user()->is_admin) {

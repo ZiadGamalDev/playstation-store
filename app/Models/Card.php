@@ -22,4 +22,9 @@ class Card extends Model
     {
         return $this->hasMany(Cart::class);
     }
+
+    public function favorites()
+    {
+        return $this->hasMany(CardFavorite::class);
+    }
 }

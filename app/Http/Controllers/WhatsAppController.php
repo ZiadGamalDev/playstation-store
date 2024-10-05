@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Services\WhatsAppService;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
 
 class WhatsAppController extends Controller
 {
