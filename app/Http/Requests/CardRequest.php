@@ -22,7 +22,7 @@ class CardRequest extends FormRequest
             'price' => "$mandatory|numeric",
             'discount' => 'nullable|numeric|gt:0',
             'country_id' => "$mandatory|exists:countries,id",
-            'type_id' => "$mandatory|exists:types,id",
+            'category_id' => "$mandatory|exists:categories,id",
         ];
     }
 }

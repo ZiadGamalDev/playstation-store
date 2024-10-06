@@ -36,7 +36,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('artisan', function (Request $request) {
     Artisan::call($request->command);
     return Artisan::output();
-});
+})->middleware('auth.dev');
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
