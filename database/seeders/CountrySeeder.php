@@ -47,7 +47,6 @@ class CountrySeeder extends Seeder
             if (file_exists($path)) {
                 Storage::disk('public')->put($country['flag'], file_get_contents($path));
             }
-            
             Country::create($country);
         }
     }

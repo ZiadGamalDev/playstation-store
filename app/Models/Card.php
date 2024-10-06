@@ -10,7 +10,7 @@ class Card extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'image', 'price', 'discount', 'country_id', 'type',
+        'title', 'description', 'image', 'price', 'discount', 'country_id', 'category_id',
     ];
 
     public function country()
@@ -26,5 +26,10 @@ class Card extends Model
     public function favorites()
     {
         return $this->hasMany(CardFavorite::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }

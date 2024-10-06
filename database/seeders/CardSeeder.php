@@ -18,7 +18,7 @@ class CardSeeder extends Seeder
                 'price' => 100,
                 'discount' => null,
                 'country_id' => 1,
-                'type' => 'PlayStation',
+                'category_id' => 1,
             ],
             [
                 'title' => 'PSN 100$ USE',
@@ -27,7 +27,7 @@ class CardSeeder extends Seeder
                 'price' => 200,
                 'discount' => 150,
                 'country_id' => 2,
-                'type' => 'PlayStation',
+                'category_id' => 1,
             ]
         ];
 

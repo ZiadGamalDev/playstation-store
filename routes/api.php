@@ -12,6 +12,7 @@ use App\Http\Controllers\CardController;
 use App\Http\Controllers\CardFavoriteController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\WhatsAppController;
 use Illuminate\Support\Facades\Artisan;
@@ -61,7 +62,10 @@ Route::group(['middleware' => ['auth']], function () {
 
     Route::get('payments', [PaymentController::class, 'index']);
     Route::get('payments/{payment}', [PaymentController::class, 'show']);
-    
+
+    Route::get('categories', [CategoryController::class, 'index']);
+    Route::get('categories/{category}', [CategoryController::class, 'show']);
+
     Route::group(['middleware' => ['auth.role:admin']], function () {
         Route::post('countries', [CountryController::class, 'store']);
         Route::put('countries/{country}', [CountryController::class, 'update']);
@@ -74,6 +78,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('card-codes', [CardCodeController::class, 'index']);
         Route::get('card-codes/{cardCode}', [CardCodeController::class, 'show']);
         Route::post('card-codes', [CardCodeController::class, 'store']);
+
+        # Category
+        Route::post('categories', [CategoryController::class, 'store']);
+        Route::put('categories', [CategoryController::class, 'update']);
+        Route::delete('categories/{category}', [CategoryController::class, 'destroy']);
     });
 
     Route::group(['middleware' => ['auth.role:user']], function () {        

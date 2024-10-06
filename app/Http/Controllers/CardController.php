@@ -11,11 +11,16 @@ class CardController extends Controller
 {
     public function index(Request $request)
     {
-        if ($type = $request->type) {
-            $cards = Card::where('type', $type)->get();
-        } else {
-            $cards = Card::all();
+        $query = Card::query();
+
+        if ($category_id = $request->get('category_id')) {
+            $query->where('category_id', $category_id);
         }
+        if ($country_id = $request->get('country_id')) {
+            $query->where('country_id', $country_id);
+        }
+
+        $cards = $query->get();
 
         return $this->respondWithData('Cards retrieved successfully', $cards, 200);
     }
