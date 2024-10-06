@@ -19,6 +19,7 @@ return new class extends Migration
             $table->decimal('price');
             $table->decimal('discount')->nullable()->default(null);
             $table->foreignId('country_id')->constrained()->onDelete('cascade');
+            $table->string('type')->nullable();
             $table->timestamps();
         });
     }

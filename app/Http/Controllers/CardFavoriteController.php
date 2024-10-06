@@ -43,4 +43,13 @@ class CardFavoriteController extends Controller
 
         return $this->successResponse('Card removed from favorites successfully', 200);
     }
+
+    public function toggle(CardFavoriteRequest $request)
+    {
+        $data = $request->validated();
+
+        $favorite = $this->user->favoriteCards()->where('card_id', $data['card_id'])->first();
+        
+        return $favorite ? $this->destroy($favorite) : $this->store($request);
+    }
 }

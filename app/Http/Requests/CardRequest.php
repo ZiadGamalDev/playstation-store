@@ -22,6 +22,7 @@ class CardRequest extends FormRequest
             'price' => "$mandatory|numeric",
             'discount' => 'nullable|numeric|gt:0',
             'country_id' => "$mandatory|exists:countries,id",
+            'type' => 'nullable|string|max:255',
         ];
     }
 }

@@ -16,7 +16,6 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\WhatsAppController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -89,6 +88,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('card-favorites', [CardFavoriteController::class, 'index']);
         Route::post('card-favorites', [CardFavoriteController::class, 'store']);
         Route::delete('card-favorites/{favorite}', [CardFavoriteController::class, 'destroy']);
+        Route::post('card-favorites/toggle', [CardFavoriteController::class, 'toggle']);
     });
 });
 

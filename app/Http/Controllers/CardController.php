@@ -4,13 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CardRequest;
 use App\Models\Card;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
 class CardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $cards = Card::all();
+        if ($type = $request->type) {
+            $cards = Card::where('type', $type)->get();
+        } else {
+            $cards = Card::all();
+        }
 
         return $this->respondWithData('Cards retrieved successfully', $cards, 200);
     }

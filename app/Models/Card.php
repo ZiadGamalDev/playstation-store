@@ -10,7 +10,7 @@ class Card extends Model
     use HasFactory;
 
     protected $fillable = [
-        'title', 'description', 'image', 'price', 'discount', 'country_id',
+        'title', 'description', 'image', 'price', 'discount', 'country_id', 'type',
     ];
 
     public function country()
