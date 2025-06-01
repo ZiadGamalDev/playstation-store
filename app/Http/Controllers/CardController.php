@@ -21,6 +21,7 @@ class CardController extends Controller
         }
 
         $cards = $query->get();
+        // $cards = $query->withCount('favorites as is_favorite')->get();
 
         return $this->respondWithData('Cards retrieved successfully', $cards, 200);
     }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Auth\GoogleAuthController;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\PasswordResetEmailController;
 use App\Http\Controllers\Auth\VerificationEmailController;
@@ -37,6 +38,11 @@ Route::post('artisan', function (Request $request) {
     Artisan::call($request->command);
     return Artisan::output();
 })->middleware('auth.dev');
+
+Route::prefix('auth/google')->group(function () {
+    Route::get('url', [GoogleAuthController::class, 'getAuthUrl']);
+    Route::get('callback', [GoogleAuthController::class, 'handleCallback'])->name('google.callback');
+});
 
 Route::post('register', [AuthController::class, 'register']);
 Route::post('login', [AuthController::class, 'login']);
